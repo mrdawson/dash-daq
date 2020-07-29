@@ -9,12 +9,11 @@ export { default as LEDDisplay } from './components/LEDDisplay.react';
 export { default as NumericInput } from './components/NumericInput.react';
 export { default as PowerButton } from './components/PowerButton.react';
 export { default as PrecisionInput } from './components/PrecisionInput.react';
+export { default as ScientificInput } from './components/ScientificInput.react';
 export { default as StopButton } from './components/StopButton.react';
 export { default as Slider } from './components/Slider.react';
 export { default as Tank } from './components/Tank.react';
 export { default as Thermometer } from './components/Thermometer.react';
 export { default as ToggleSwitch } from './components/ToggleSwitch.react';
-export {
-  default as DarkThemeProvider
-} from './components/DarkThemeProvider.react';
+export { default as DarkThemeProvider } from './components/DarkThemeProvider.react';
 export { default as Joystick } from './components/Joystick.react';
