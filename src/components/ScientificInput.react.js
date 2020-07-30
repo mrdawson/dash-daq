@@ -128,14 +128,14 @@ class ScientificInput extends Component {
             >
               <option value={24}>Y{baseUnit}</option>
               <option value={21}>Z{baseUnit}</option>
-              <option value={28}>Z{baseUnit}</option>
-              <option value={15}>Z{baseUnit}</option>
+              <option value={18}>E{baseUnit}</option>
+              <option value={15}>P{baseUnit}</option>
               <option value={12}>T{baseUnit}</option>
               <option value={9}>G{baseUnit}</option>
               <option value={6}>M{baseUnit}</option>
               <option value={3}>k{baseUnit}</option>
               <option value={0}>{baseUnit}</option>
-              <option value={-3}>{baseUnit}</option>
+              <option value={-3}>m{baseUnit}</option>
               <option value={-6}>&mu;{baseUnit}</option>
               <option value={-9}>n{baseUnit}</option>
               <option value={-12}>p{baseUnit}</option>
