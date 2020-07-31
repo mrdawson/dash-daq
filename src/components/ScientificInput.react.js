@@ -14,7 +14,7 @@ import { getClassName, getFilteredProps } from '../helpers/classNameGenerator';
 class ScientificInput extends Component {
   constructor(props) {
     super(props);
-    let [significand, magnitude] = sci.numToScientific(props.value);
+    let [significand, magnitude] = sci.numToScientific(props.value, props.unitMagnitude || 1);
     // this.props.setProps({
     //     ...this.props,
     //     significand: significand,
@@ -23,13 +23,24 @@ class ScientificInput extends Component {
     this.state = {
       value: props.value,
       significand: significand,
-      magnitude: magnitude
+      magnitude: magnitude,
+      unitMagnitude: props.unitMagnitude || 1
     };
     this.setValue = this.setValue.bind(this);
   }
 
   UNSAFE_componentWillReceiveProps(newProps) {
-    if (newProps.value !== this.state.value) this.setState({ value: newProps.value });
+    if (newProps.value !== this.state.value) {
+      let [significand, magnitude] = sci.numToScientific(
+        newProps.value,
+        this.state.unitMagnitude || 1
+      );
+      this.setState({
+        value: newProps.value,
+        significand: significand,
+        magnitude: magnitude
+      });
+    }
   }
 
   setValue(event) {
@@ -41,7 +52,7 @@ class ScientificInput extends Component {
     if (name === 'significand') significand = Number(value);
     if (name === 'magnitude') magnitude = Number(value);
 
-    let new_val = significand * Math.pow(10, magnitude) || 0;
+    let new_val = significand * Math.pow(10, this.state.unitMagnitude * magnitude) || 0;
     this.setState({
       ...this.state,
       value: new_val,
@@ -59,7 +70,17 @@ class ScientificInput extends Component {
   }
 
   render() {
-    const { size, theme, style, className, id, disabled, significand, baseUnit } = this.props;
+    const {
+      size,
+      theme,
+      style,
+      className,
+      id,
+      disabled,
+      significand,
+      baseUnit,
+      unitMagnitude
+    } = this.props;
 
     const buttonStyle = {
       background: 'none',
@@ -73,6 +94,18 @@ class ScientificInput extends Component {
 
     const elementName = getClassName('scientificinput', theme);
     const filteredProps = getFilteredProps(this.props);
+
+    const uMag = [
+      '',
+      '\u00B2',
+      '\u00B3',
+      '\u2074',
+      '\u2075',
+      '\u2076',
+      '\u2077',
+      '\u2078',
+      '\u2079'
+    ][unitMagnitude - 1 || 0];
 
     const inputStyle = {
       borderRadius: 3,
@@ -126,23 +159,23 @@ class ScientificInput extends Component {
               value={this.state.magnitude}
               onChange={this.setValue}
             >
-              <option value={24}>Y{baseUnit}</option>
-              <option value={21}>Z{baseUnit}</option>
-              <option value={18}>E{baseUnit}</option>
-              <option value={15}>P{baseUnit}</option>
-              <option value={12}>T{baseUnit}</option>
-              <option value={9}>G{baseUnit}</option>
-              <option value={6}>M{baseUnit}</option>
-              <option value={3}>k{baseUnit}</option>
-              <option value={0}>{baseUnit}</option>
-              <option value={-3}>m{baseUnit}</option>
-              <option value={-6}>&mu;{baseUnit}</option>
-              <option value={-9}>n{baseUnit}</option>
-              <option value={-12}>p{baseUnit}</option>
-              <option value={-15}>f{baseUnit}</option>
-              <option value={-18}>a{baseUnit}</option>
-              <option value={-21}>z{baseUnit}</option>
-              <option value={-24}>y{baseUnit}</option>
+              <option value={24}>Y{baseUnit + uMag}</option>
+              <option value={21}>Z{baseUnit + uMag}</option>
+              <option value={18}>E{baseUnit + uMag}</option>
+              <option value={15}>P{baseUnit + uMag}</option>
+              <option value={12}>T{baseUnit + uMag}</option>
+              <option value={9}>G{baseUnit + uMag}</option>
+              <option value={6}>M{baseUnit + uMag}</option>
+              <option value={3}>k{baseUnit + uMag}</option>
+              <option value={0}>{baseUnit + uMag}</option>
+              <option value={-3}>m{baseUnit + uMag}</option>
+              <option value={-6}>&mu;{baseUnit + uMag}</option>
+              <option value={-9}>n{baseUnit + uMag}</option>
+              <option value={-12}>p{baseUnit + uMag}</option>
+              <option value={-15}>f{baseUnit + uMag}</option>
+              <option value={-18}>a{baseUnit + uMag}</option>
+              <option value={-21}>z{baseUnit + uMag}</option>
+              <option value={-24}>y{baseUnit + uMag}</option>
             </select>
           </div>
         </LabelContainer>
@@ -217,6 +250,11 @@ ScientificInput.propTypes = {
    * The Base unit of measure (e.g. Hz, T, g, K, Wb, etc.)
    */
   baseUnit: PropTypes.string,
+
+  /**
+   * The magnitude of the baseUnit (e.g. 3 for m^3 or 2 for ft^2)
+   */
+  unitMagnitude: PropTypes.oneOf([2, 3, 4, 5, 6, 7, 8, 9]),
 
   /**
    * Where the numeric input label is positioned.
